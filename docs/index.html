@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="BabelTower: Learning to Auto-parallelized Program Translation">
+  <meta name="keywords" content="Language Language Model, Code Translation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BabelTower: Learning to Auto-parallelized Program Translation</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <!-- highlight code -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">BabelTower: Learning to Auto-parallelized Program Translation
+            </h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a>Yuanbo Wen</a><sup>1,2,3</sup>,</span>
+              <span class="author-block">
+                <a>Qi Guo</a><sup>2,4</sup>,</span>
+              <span class="author-block">
+                <a>Qiang Fu</a><sup>1,2,3</sup>,
+              </span>
+              <span class="author-block">
+                <a>Xiaqing Li</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a>Jianxing Xu</a><sup>1,2,3</sup>,
+              </span>
+              <span class="author-block">
+                <a>Yanlin Tang</a><sup>2,4</sup>,
+              </span>
+              <span class="author-block">
+                <a>Yongwei Zhao</a><sup>2,3</sup>,
+              </span>
+              <span class="author-block">
+                <a>Xing Hu</a><sup>2</sup>,
+              </span>
+              <span class="author-block">
+                <a>Zidong Du</a><sup>2,3</sup>,
+              </span>
+              <span class="author-block">
+                <a>Ling Li</a><sup>5</sup>,
+              </span>
+              <span class="author-block">
+                <a>Chao Wang</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a>Xuehai Zhou</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a>Yunji Chen</a><sup>2,4</sup>
+              </span>
+            </div>
+
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><sup>1</sup>University of Science and Technology of China</span><br>
+              <span class="author-block"><sup>2</sup>State Key Lab of Processors, Institute of Computing Technology,
+                CAS</span><br>
+              <span class="author-block"><sup>3</sup>Cambricon Technologies</span><br>
+              <span class="author-block"><sup>4</sup>University of Chinese Academy of Sciences</span>
+              <span class="author-block"><sup>4</sup>Institute of Software, CAS</span>
+            </div>
+
+            <div class="column has-text-centered">
+              <div class="publication-links">
+                <!-- PDF Link. -->
+                <span class="link-block">
+                  <a href="https://proceedings.mlr.press/v162/wen22b.html"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                    </span>
+                    <span>Paper</span>
+                  </a>
+                </span>
+                <!-- Code Link. -->
+                <span class="link-block">
+                  <a href="https://github.com/kcxain/babeltower"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+                <!-- Raw data Link-->
+                <span class="link-block">
+                  <a href="https://huggingface.co/datasets/kcxain/BabelTower"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fas fa-cloud-download-alt"></i>
+                    </span>
+                    <span>Data</span>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-3">Overview</h2>
+          <div class="content has-text-justified">
+            <p>
+            <p>
+              GPUs have become the dominant computing platforms for many applications, while programming GPUs with the
+              widely-used CUDA parallel programming model is difficult. As sequential C code is relatively easy to
+              obtain either from legacy repositories or by manual implementation, automatically translating C to its
+              parallel CUDA counterpart is promising to relieve the burden of GPU programming. However, because of huge
+              differences between the sequential C and the parallel CUDA programming model, existing approaches fail to
+              conduct the challenging auto-parallelized program translation. In this paper, we propose a learning-based
+              framework, i.e., BabelTower, to address this problem. We first create a large-scale dataset consisting of
+              computeintensive function-level monolingual corpora. We further propose using back-translation with a
+              discriminative reranker to cope with unpaired corpora and parallel semantic conversion. Experimental
+              results show that BabelTower outperforms state-of-the-art by 1.79, 6.09, and 9.39 in terms of BLEU,
+              CodeBLEU, and specifically designed ParaBLEU, respectively. The CUDA code generated by BabelTower attains
+              a speedup of up to 347× over the sequential C code, and the developer productivity is improved by at most
+              3.8×.
+            </p>
+            <p>
+              Overview of BabelTower learning framework. We train the discriminative ranking model in the
+              back-translation step, i.e., CUDA-C-CUDA, to synthesize paired data. Further, we specially designed the
+              metrics ParaBLEU for CUDA, and learn to predict the ParaBLEU score by minimizing the KL-divergence between
+              the output distribution of the model and target distribution.
+            </p>
+          </div>
+          <img src="./static/images/overview.png">
+        </div>
+      </div>
+      <!--/ Overview. -->
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-3"> Main Results </h2>
+            <p>
+              We evaluate the results of auto-parallelization approaches (i.e., Bones and PPCG) and statistical program
+              translation (i.e., Transcoder, BabelTower) and in different metrics: BLEU, CodeBLEU, ParaBLEU, and
+              compilation accuracy. We perform beam decoding with beam size 50 for Statistical program translation
+              approaches.
+            </p>
+            <div class="has-text-centered">
+              <img src="./static/images/result.png" style="margin: 0 auto;">
+            </div>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="columns is-centered">
+        <div class="column is-full-width">
+          <h2 class="title is-3">Quick Start</h2>
+          <pre style="width: 100%; overflow: auto; background: none;">
+          <code class="python" style="min-width: 100%; width: 0px; overflow: scroll; font-family: 'Cascadia Code', 'Menlo', 'Courier New', monospace;">
+git clone https://github.com/kcxain/c2cuda.git
+cd c2cuda
+pip install -e .
+
+model='gpt-4o-2024-05-13'
+python -m babeltower_eval.eval_passk \
+    --model_to_eval $model \
+    --dataset 'kcxain/BabelTower' \
+    --model_mode 'trans' \
+    --sample_num 20 \
+    --save_translated_code
+            </code>
+          </pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="container is-max-desktop">
+        <div class="column">
+          <div class="content">
+            <h2 class="title is-3"> Translation Cases </h2>
+            <p>
+              These results are produced by BabelTower.
+            </p>
+
+            <head>
+              <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+              <style>
+                /* 容器系统 */
+                .code-container {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 20px;
+                  padding: 20px;
+                  max-width: 1200px;
+                  margin: 0 auto;
+                }
+
+                /* 代码对比行 */
+                .code-row {
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  /* 强制双列布局 */
+                  gap: 20px;
+                  min-height: 400px;
+                }
+
+                /* 代码框样式 */
+                .code-box {
+                  background: white;
+                  border-radius: 8px;
+                  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                  overflow: hidden;
+                }
+
+                /* CUDA特殊样式 */
+                .cuda-box {
+                  border-left: 4px solid #6495ED;
+                }
+
+                /* 标题栏 */
+                .code-header {
+                  background: #f8f9fa;
+                  padding: 12px 20px;
+                  font-family: -apple-system, sans-serif;
+                  font-weight: 600;
+                  border-bottom: 2px solid #eee;
+                }
+
+                /* 代码内容区 */
+                .code-content {
+                  height: 360px;
+                  overflow-y: auto;
+                  padding: 20px;
+                }
+
+                /* 代码高亮调整 */
+                pre[class*="language-"] {
+                  margin: 0;
+                }
+
+                code[class*="language-"] {
+                  font-size: 14px;
+                }
+              </style>
+            </head>
+
+            <body>
+              <div class="code-container">
+                <!-- 第一组对比 -->
+                <div class="code-row">
+                  <!-- C 代码 -->
+                  <div class="code-box">
+                    <div class="code-header">Source C</div>
+                    <div class="code-content">
+                      <pre><code class="language-c">
+void transpositionCPU(int * vector, int * transposed, int size) {
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++) transposed[i + j * size] = vector[j + i * size];
+}
+                      </code></pre>
+                    </div>
+                  </div>
+
+                  <!-- CUDA 代码 -->
+                  <div class="code-box cuda-box">
+                    <div class="code-header">Translated CUDA</div>
+                    <div class="code-content">
+                      <pre><code class="language-cuda">
+__global__ void transpositionCPU(int * vector, int * transposed, int size) {
+    for (int i = threadIdx.x + blockIdx.x * blockDim.x; i < size; i += blockDim.x * gridDim.x)
+        for (int j = threadIdx.y + blockIdx.y * blockDim.y; j < size; j += blockDim.y * gridDim.y) transposed[i + j * size] = vector[j + i * size];
+}
+                      </code></pre>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 第二组对比 -->
+                <div class="code-row">
+                  <!-- C 代码 -->
+                  <div class="code-box">
+                    <div class="code-header">Source C</div>
+                    <div class="code-content">
+                      <pre><code class="language-c">
+void gemm(...) {
+    int i, j, k;
+    for (i = 0; i < NI; i++)
+        for (j = 0; j < NJ; j++) {
+            C[i * NJ + j] *= beta;
+            for (k = 0; k < NK; ++k) C[i * NJ + j] += alpha * A[i * NK + k] * B[k * NJ + j];
+        }
+}
+                      </code></pre>
+                    </div>
+                  </div>
+
+                  <!-- CUDA 代码 -->
+                  <div class="code-box cuda-box">
+                    <div class="code-header">Translated CUDA</div>
+                    <div class="code-content">
+                      <pre><code class="language-cuda">
+__global__ void gemm(...) {
+    int i, j, k;
+    i = blockIdx.x * blockDim.x + threadIdx.x;
+    j = blockIdx.y * blockDim.y + threadIdx.y;
+    if ((i < NI) && (j < NJ)) {
+        C[i * NJ + j] *= beta;
+        for (k = 0; k < NK; ++k) C[i * NJ + j] += alpha * A[i * NK + k] * B[k * NJ + j];
+    }
+}
+                      </code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-c.min.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-cuda.min.js"></script>
+            </body>
+
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <hr/> -->
+    <!-- <section class="section" id="BibTeX"> -->
+    <!-- <div class="columns is-centered"> -->
+    <div class="container content is-max-desktop">
+      <h2 class="title is-3"> BibTex </h2>
+      <pre>
+  <code class="nohighlight" style="background-color: transparent; color: black; font-family: monospace;"><code class="nohighlight" style="background-color: transparent; color: black; font-family: monospace;">@InProceedings{pmlr-v162-wen22b,
+    title     = {{B}abel{T}ower: Learning to Auto-parallelized Program Translation},
+    author    = {Wen, Yuanbo and Guo, Qi and Fu, Qiang and Li, Xiaqing and Xu, Jianxing and Tang, Yanlin and Zhao, Yongwei and Hu, Xing and Du, Zidong and Li, Ling and Wang, Chao and Zhou, Xuehai and Chen, Yunji},
+    booktitle = {Proceedings of the 39th International Conference on Machine Learning},
+    year      = {2022}</code>
+</pre>
+    </div>
+    <!-- </section> -->
+  </section>
+
+  <!-- <hr/> -->
+
+
+  <footer class="footer">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-8">
+          <div class="content">
+            <p>
+              This website is licensed under a <a rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+                Commons Attribution-ShareAlike 4.0 International License</a>.
+            </p>
+            <p>
+              Thanks for the website template <a href="https://nerfies.github.io">Nerfies</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+
+</html>
