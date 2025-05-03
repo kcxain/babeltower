@@ -199,27 +199,6 @@
           </div>
         </div>
       </div>
-
-      <div class="columns is-centered">
-        <div class="column is-full-width">
-          <h2 class="title is-3">Quick Start</h2>
-          <pre style="width: 100%; overflow: auto; background: none;">
-          <code class="python" style="min-width: 100%; width: 0px; overflow: scroll; font-family: 'Cascadia Code', 'Menlo', 'Courier New', monospace;">
-git clone https://github.com/kcxain/c2cuda.git
-cd c2cuda
-pip install -e .
-
-model='gpt-4o-2024-05-13'
-python -m babeltower_eval.eval_passk \
-    --model_to_eval $model \
-    --dataset 'kcxain/BabelTower' \
-    --model_mode 'trans' \
-    --sample_num 20 \
-    --save_translated_code
-            </code>
-          </pre>
-        </div>
-      </div>
     </div>
 
     <div class="columns is-centered">
